@@ -34,8 +34,5 @@ public class BookController {
         headers.setLocation(uriComponents.toUri());
 
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
-
     }
-
-
 }
