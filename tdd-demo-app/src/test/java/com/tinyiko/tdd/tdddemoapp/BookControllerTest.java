@@ -1,6 +1,7 @@
 package com.tinyiko.tdd.tdddemoapp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tinyiko.tdd.tdddemoapp.controller.BookController;
 import com.tinyiko.tdd.tdddemoapp.dto.BookRequest;
 import com.tinyiko.tdd.tdddemoapp.service.BookServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -18,11 +19,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(BookControllerTest.class)
+@WebMvcTest(BookController.class)
 public class BookControllerTest {
 
     @Autowired
@@ -52,7 +53,8 @@ public class BookControllerTest {
                 .content(objectMapper.writeValueAsString(bookRequest)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
-                .andExpect(header().string("Location", "http://localhost/api/books/1"));
+                .andExpect(header().string("Location", "http://localhost/api/books/1"))
+                        .andDo(print());
 
         assertThat(argumentCaptor.getValue().getAuthor(), is("Duke"));
         assertThat(argumentCaptor.getValue().getIsbn(), is("111167"));
