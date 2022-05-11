@@ -26,4 +26,8 @@ public class BookServiceImpl implements BookService{
 
         return book.getId();
     }
+
+    public Book getAllBooks() {
+        return null;
+    }
 }

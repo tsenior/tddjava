@@ -1,7 +1,9 @@
 package com.tinyiko.tdd.tdddemoapp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tinyiko.tdd.tdddemoapp.controller.BookController;
 import com.tinyiko.tdd.tdddemoapp.dto.BookRequest;
+import com.tinyiko.tdd.tdddemoapp.model.Book;
 import com.tinyiko.tdd.tdddemoapp.service.BookServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -21,8 +25,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(BookControllerTest.class)
+
+@WebMvcTest(BookController.class)
 public class BookControllerTest {
 
     @Autowired
@@ -57,6 +61,22 @@ public class BookControllerTest {
         assertThat(argumentCaptor.getValue().getAuthor(), is("Duke"));
         assertThat(argumentCaptor.getValue().getIsbn(), is("111167"));
         assertThat(argumentCaptor.getValue().getTitle(), is("data structures and algorithm"));
+    }
+
+    @Test
+    public void allbooksEndPointShouldReturnTwoBooks(){
+        when(bookService.getAllBooks()).thenReturn((Book) List.of(createBook(1L, "Java 11", "Duke", "187993286"),
+                createBook(2L, "Java 11", "Duke", "187993286")));
+    }
+
+    private Book createBook(long id, String title, String author, String isbn) {
+        Book book = new Book();
+        book.setTitle(title);
+        book.setAuthor(author);
+        book.setIsbn(isbn);
+        book.setId(id);
+
+        return book;
     }
 
 
